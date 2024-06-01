@@ -1,11 +1,8 @@
-import React from 'react'
+import CardComponent from "./CardComponent"
+
 
 const Home = () => {
-  return (
-    <div>
-      Home
-    </div>
-  )
+  return (<CardComponent/>)
 }
 
 export default Home

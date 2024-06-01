@@ -73,7 +73,7 @@ const navItems = ['Home', 'About', 'Contact'];
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            Branch Name
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
@@ -101,7 +101,7 @@ const navItems = ['Home', 'About', 'Contact'];
           {drawer}
         </Drawer>
       </nav>
-      <Box component="main" sx={{ p: 3 }}>
+      <Box component="main" sx={{ p: 3, width:'100%' }}>
         <Toolbar />
         <>
         {child}
