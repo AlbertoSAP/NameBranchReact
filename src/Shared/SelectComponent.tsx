@@ -39,26 +39,25 @@ mapOption,
 selectLabel
  }) => {
   const theme = useTheme();
-  const [optioinSelected, setOptioinSelected] = React.useState<string[]>([]);
+  const [optioinSelected, setOptioinSelected] = React.useState<string[]>([mapOption[0].value]);
 
   const handleChange = (event: SelectChangeEvent<typeof optioinSelected>) => {
     const {
       target: { value },
     } = event;
+    
     setOptioinSelected(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
+      typeof value === 'string' ? [value] : value,
     );
   };
 
   return (
     <div>
       <FormControl sx={{ width: '100%' }}>
-        <InputLabel id="demo-multiple-name-label">{selectLabel}</InputLabel>
+        <InputLabel id="selector-option-name-label">{selectLabel}</InputLabel>
         <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
-          multiple
+          labelId="selector-option-name-label"
+          id="selector-option-name"
           value={optioinSelected}
           onChange={handleChange}
           input={<OutlinedInput label={selectLabel} />}
