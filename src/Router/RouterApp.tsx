@@ -1,19 +1,24 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "../Components/Home";
-import NavBar from "../Shared/NavBar";
+import PrivateRoutes from "./PrivateRoutes";
+import Login from "../Auth/Login";
+
 
 const RouterApp = () => {
   return (
     <BrowserRouter>
-      {/* NavBar */}
-      <NavBar
-        child={
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        }
-      />
+      <Routes>
+
+            <Route
+              path="/"
+              element={<PrivateRoutes/>}
+            />
+            <Route
+              path="/login"
+              element={<Login/>}
+            />
+          
+      </Routes>
     </BrowserRouter>
   );
 };
