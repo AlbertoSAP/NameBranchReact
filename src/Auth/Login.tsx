@@ -12,6 +12,8 @@ import {
 import useScreenSize from "../Hooks/useScreenSize";
 import imgBg from '../source/bgauth.jpg'
 import WhatshotIcon from '@mui/icons-material/Whatshot';
+import { authContext } from "../Hooks/AuthContext";
+import { useContext } from "react";
  
 const CustomTextField = styled(TextField)({
     '& .MuiInputBase-input': {
@@ -24,7 +26,8 @@ const CustomTextField = styled(TextField)({
 
 const Login = () => {
 
- 
+  const {state, trigger ,setState,setTrigger} = useContext(authContext)
+
   const { width } = useScreenSize()
   
   const getResize = (size:number) => {
@@ -39,9 +42,17 @@ const Login = () => {
    }
   }
 
+  const handerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState(
+      {
+        ...state,
+        [e.target.name]:e.target.value
+      }
+    )  
+  }
+
   return (
     <>
-    
     <Box
       sx={{
         display: "flex",
@@ -98,7 +109,7 @@ const Login = () => {
                 label="Email"
                 name="email"
                 variant="outlined"  
-
+                onChange={handerChange}
               />
 
               <CustomTextField
@@ -107,6 +118,7 @@ const Login = () => {
                 label="Password"
                 name="password"
                 variant="outlined"
+                onChange={handerChange}
               />
             </Stack>
 
@@ -119,7 +131,13 @@ const Login = () => {
               <Button variant="contained" color="success"
               sx={{
                 fontFamily:'cursive'
-              }}>
+              }}
+              onClick={()=> setTrigger({
+                ...trigger,
+                dispatch:true,
+                action:'login'
+              })}
+              >
                 Login
               </Button>
             </Box>
