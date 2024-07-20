@@ -5,6 +5,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
+  signOut,
+  setPersistence,
+  browserSessionPersistence,
 } from "firebase/auth";
 import { auth } from "../FBConfig/firebasecc";
 import { useNavigate } from "react-router-dom";
@@ -17,11 +20,25 @@ export interface IUser {
   confirmPassword?: string;
 }
 
+export interface IAuth {
+  nickName: string,
+  fullName: string,
+  loginStatus: boolean,
+}
+
 interface AuthProviderProps {
   children: React.JSX.Element | React.JSX.Element[];
 }
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+
+
+  const [authInfo, setAuthInfo] = useState<IAuth>({
+    nickName: '',
+    fullName: '',
+    loginStatus: false
+  })
+
   // state User
   const [state, setState] = useState<IUser>({
     name: "",
@@ -52,11 +69,19 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async () => {
     try {
-      const { user } = await signInWithEmailAndPassword(
+      const loginInfo = await signInWithEmailAndPassword(
         auth,
         state.email,
         state.password
       );
+       setPersistence(auth, browserSessionPersistence).then(()=>{
+        return loginInfo
+       }).catch((err)=>{
+        console.log(err);
+        
+       })
+
+       const {user} = loginInfo
 
       const [name, lastName] = user.displayName?.split(" ") ?? [];
       const firstCharacterOfTheLastName = (name ?? "").charAt(0).toLowerCase();
@@ -117,8 +142,39 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const getUserInfo = () => {
+    console.log(auth.currentUser, 'get');
+
+    const localInfo = localStorage.getItem('session')
+
+    if (!!localInfo) {
+      const { name, nickName } = JSON.parse(localInfo) as { name: string, email: string, nickName: string }
+      setAuthInfo({
+        nickName,
+        fullName: name,
+        loginStatus: true
+      })
+    } else {
+      setAuthInfo({
+        nickName: '',
+        fullName: '',
+        loginStatus: false
+      })
+    }
+  }
+
+  const logout = async () => {
+    await signOut(auth)
+    localStorage.clear()
+    setAuthInfo({
+      nickName: '',
+      fullName: '',
+      loginStatus: false
+    })
+  }
 
   useEffect(() => {
+    getUserInfo()
     if (!!trigger.dispatch) {
       switch (trigger.action) {
         case "login":
@@ -130,10 +186,10 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           break;
       }
     }
-  }, [trigger]);
+  }, [trigger]); // mejora este carga de dependencias
 
   return (
-    <authContext.Provider value={{ state, setState, setTrigger, trigger }}>
+    <authContext.Provider value={{ state, authInfo, setState, setTrigger, trigger, logout }}>
       {children}
     </authContext.Provider>
   );
