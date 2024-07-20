@@ -1,16 +1,20 @@
 import { Dispatch, SetStateAction, createContext } from "react";
-import { IUser } from "./AuthProvider";
+import { IAuth, IUser } from "./AuthProvider";
 
 
-export interface AuthContextProp{
-    state:IUser,
-    setState:Dispatch<SetStateAction<IUser>>
-    setTrigger:React.Dispatch<React.SetStateAction<{
-        dispatch:boolean,
-        action:string
+export interface AuthContextProp {
+    state: IUser,
+    authInfo: IAuth,
+    setState: Dispatch<SetStateAction<IUser>>
+    setTrigger: React.Dispatch<React.SetStateAction<{
+        dispatch: boolean,
+        action: string
     }>>,
-    trigger:{dispatch:boolean,
-        action:string}
+    trigger: {
+        dispatch: boolean,
+        action: string
+    },
+    logout:()=> void
 }
 
-export const authContext = createContext<AuthContextProp>({} as AuthContextProp )
+export const authContext = createContext<AuthContextProp>({} as AuthContextProp)
