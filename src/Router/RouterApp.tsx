@@ -4,6 +4,7 @@ import PrivateRoutes from "./PrivateRoutes";
 import Login from "../Auth/Login";
 import Register from "../Auth/Register";
 import AuthProvider from "../Hooks/AuthProvider";
+import HomePublic from "../public/HomePublic";
 
 
 const RouterApp = () => {
@@ -26,6 +27,11 @@ const RouterApp = () => {
               path="/register"
               element={<Register/>}
               key={'register'}
+            />
+            <Route
+              path="/"
+              element={<HomePublic/>}
+              key={'home'}
             />
           
       </Routes>
